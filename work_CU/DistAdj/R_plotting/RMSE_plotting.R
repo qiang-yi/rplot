@@ -31,7 +31,7 @@ for (med_ID in (1:length(meds))){
     }
   }
   
-  #How to plot the matrix (resid_m) as a line chart in which each column is represented by a line, x axis is the row names.
+  #How to plot the matrix (resid_m) as a line chart where h each column is represented by a line, x axis is the row names.
   resid_L<-c(resid_L,list(resid_m))
   
 }
