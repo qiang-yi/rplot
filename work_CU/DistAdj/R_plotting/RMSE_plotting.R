@@ -1,17 +1,8 @@
 library(ggplot2)
 library(reshape2)
-# sa=vector(mode="list", length=6)
-# names(sa) <- c("Colorado", "Louisiana", "North Carolina","Nebraska", "Texas", "Washington")
-# sa[[1]]='C:/Users/yiqi7710/work_CU/data/Modified_2/Colorado/'
-# sa[[2]]='C:/Users/yiqi7710/work_CU/data/Modified_2/Louisiana/'
-# sa[[3]]='C:/Users/yiqi7710/work_CU/data/Modified_2/NC/'
-# sa[[4]]='C:/Users/yiqi7710/work_CU/data/Modified_2/Nebraska/'
-# sa[[5]]='C:/Users/yiqi7710/work_CU/data/Modified_2/Washington/'
-# sa[[6]]='C:/Users/yiqi7710/work_CU/data/Modified_2/Texas/'
-# fn_ne=paste0(sa$Nebraska,'transects_2.csv')
 
 #Change the path of the file
-result_ne=read.csv('C:/transects_2.csv')
+result_ne <- read.csv('transects_2.csv')
 
 num_tran=length(result_ne$Transect_ID)
 col_names=colnames(result_ne)
@@ -30,10 +21,21 @@ for (med_ID in (1:length(meds))){
 
     }
   }
-  
+
   #How to plot the matrix (resid_m) as a line chart where h each column is represented by a line, x axis is the row names.
   resid_L<-c(resid_L,list(resid_m))
-  
 }
 
 resid_L
+
+
+
+list_of_dfs <- lapply(resid_L, melt, varnames = c("transect_len", 'transect_id'))
+nrow_each <- lapply(list_of_dfs, nrow)
+big_df <- do.call(rbind, list_of_dfs)
+big_df$med_ID <- rep(1:length(meds), unlist(nrow_each))
+
+ggplot(big_df, aes(x = factor(transect_len), y = value)) +
+  geom_line(aes(group = transect_id, color = factor(transect_id))) +
+  facet_wrap(~med_ID)
+
